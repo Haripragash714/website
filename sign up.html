@@ -41,6 +41,11 @@
                     <label for="full-name" class="sr-only">Full Name</label>
                     <input id="full-name" name="name" type="text" autocomplete="name" required class="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Full Name">
                 </div>
+                <!-- Mobile number input field -->
+                <div>
+                    <label for="mobile-number" class="sr-only">Mobile Number</label>
+                    <input id="mobile-number" name="mobile-number" type="tel" autocomplete="tel" required class="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Mobile Number">
+                </div>
                 <!-- Email input field -->
                 <div>
                     <label for="email-address" class="sr-only">Email address</label>
@@ -74,6 +79,7 @@
         const form = document.getElementById('signUpForm');
         const messageBox = document.getElementById('messageBox');
         const nameInput = document.getElementById('full-name');
+        const mobileInput = document.getElementById('mobile-number');
         const emailInput = document.getElementById('email-address');
         const passwordInput = document.getElementById('password');
 
@@ -88,11 +94,12 @@
 
             // Get the values from the input fields
             const name = nameInput.value.trim();
+            const mobile = mobileInput.value.trim();
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
 
             // Perform simple front-end validation
-            if (!name || !email || !password) {
+            if (!name || !mobile || !email || !password) {
                 messageBox.textContent = 'Please fill out all fields.';
                 messageBox.classList.remove('hidden');
             } else {
@@ -100,6 +107,7 @@
                 // For this example, we'll just log it to the console.
                 console.log('Sign-up attempt with:');
                 console.log('Name:', name);
+                console.log('Mobile Number:', mobile);
                 console.log('Email:', email);
                 console.log('Password:', password);
                 
