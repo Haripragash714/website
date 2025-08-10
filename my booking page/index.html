@@ -27,30 +27,15 @@
         <!-- Message box for displaying feedback -->
         <div id="messageBox" class="p-4 hidden text-sm rounded-lg" role="alert"></div>
 
-        <!-- Container for all booking cards -->
+        <!-- Container for all booking cards and their details -->
         <div id="bookings-container" class="space-y-6">
-            <!-- Booking cards will be dynamically added here by JavaScript -->
+            <!-- Booking cards and their details will be dynamically added here by JavaScript -->
         </div>
 
         <!-- Message for when there are no bookings -->
         <div id="no-bookings-message" class="text-center p-12 hidden">
             <p class="text-gray-500 text-lg">You don't have any bookings at the moment.</p>
             <p class="mt-2 text-gray-500 text-md">Book a new service to get started!</p>
-        </div>
-
-        <!-- Bill Details Section (hidden by default) -->
-        <div id="bill-details-container" class="hidden mt-8 p-6 bg-gray-50 rounded-xl shadow-inner">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-2xl font-bold text-gray-900">Booking Details</h3>
-                <button id="close-bill-btn" class="text-gray-500 hover:text-gray-700 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <div id="bill-details-content">
-                <!-- Bill details will be dynamically added here -->
-            </div>
         </div>
     </div>
 
@@ -59,9 +44,6 @@
             const bookingsContainer = document.getElementById('bookings-container');
             const noBookingsMessage = document.getElementById('no-bookings-message');
             const messageBox = document.getElementById('messageBox');
-            const billDetailsContainer = document.getElementById('bill-details-container');
-            const billDetailsContent = document.getElementById('bill-details-content');
-            const closeBillBtn = document.getElementById('close-bill-btn');
 
             // Mock data for user's bookings, now with service descriptions and bill details
             const mockBookings = [
@@ -111,7 +93,7 @@
                 }
             ];
 
-            // Function to render a single booking card
+            // Function to render a single booking card along with its hidden details section
             function renderBooking(booking) {
                 const statusColor = {
                     'Confirmed': 'bg-green-100 text-green-800',
@@ -120,8 +102,13 @@
                     'Canceled': 'bg-red-100 text-red-800'
                 };
 
+                // Create a container for the booking card and its details
+                const bookingGroup = document.createElement('div');
+                bookingGroup.classList.add('flex', 'flex-col', 'shadow-md', 'rounded-xl');
+                
+                // Main booking card
                 const bookingCard = document.createElement('div');
-                bookingCard.classList.add('flex', 'flex-col', 'md:flex-row', 'justify-between', 'items-center', 'p-6', 'bg-gray-50', 'rounded-xl', 'shadow-md');
+                bookingCard.classList.add('flex', 'flex-col', 'md:flex-row', 'justify-between', 'items-center', 'p-6', 'bg-gray-50', 'rounded-t-xl');
                 bookingCard.setAttribute('data-booking-id', booking.id);
 
                 bookingCard.innerHTML = `
@@ -147,8 +134,30 @@
                         </div>
                     </div>
                 `;
+                
+                // Bill Details Section (initially hidden)
+                const billDetailsContainer = document.createElement('div');
+                billDetailsContainer.id = `details-${booking.id}`;
+                billDetailsContainer.classList.add('hidden', 'p-6', 'bg-gray-100', 'rounded-b-xl', 'transition-all', 'duration-300', 'ease-in-out');
+                
+                billDetailsContainer.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-2xl font-bold text-gray-900">Booking Details</h3>
+                        <button class="close-details-btn text-gray-500 hover:text-gray-700 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="bill-details-content">
+                        <!-- Bill details will be dynamically added here -->
+                    </div>
+                `;
 
-                bookingsContainer.appendChild(bookingCard);
+                bookingGroup.appendChild(bookingCard);
+                bookingGroup.appendChild(billDetailsContainer);
+
+                bookingsContainer.appendChild(bookingGroup);
             }
 
             // Function to display messages to the user
@@ -162,8 +171,8 @@
                 }
             }
 
-            // Function to render the bill details
-            function renderBillDetails(booking) {
+            // Function to render the bill details into a specific container
+            function renderBillDetails(booking, container) {
                 const billItemsHtml = booking.billDetails.items.map(item => `
                     <div class="flex justify-between py-2 border-b border-gray-200">
                         <span>${item.description}</span>
@@ -171,7 +180,7 @@
                     </div>
                 `).join('');
 
-                billDetailsContent.innerHTML = `
+                container.innerHTML = `
                     <p class="text-gray-600 mb-4">Invoice for **${booking.service}** on **${booking.date}** at **${booking.time}**.</p>
                     
                     <div class="space-y-2">
@@ -182,7 +191,6 @@
                         <span>$${booking.billDetails.total.toFixed(2)}</span>
                     </div>
                 `;
-                billDetailsContainer.classList.remove('hidden');
             }
 
             // Render all bookings on page load
@@ -195,37 +203,51 @@
                 noBookingsMessage.classList.remove('hidden');
             }
 
-            // Event listener for the "View Details" and "Cancel" buttons
+            // Event listener for the entire bookings container to handle clicks on the "View Details" and "Cancel" buttons
             bookingsContainer.addEventListener('click', function(event) {
                 const target = event.target;
-                const bookingCard = target.closest('[data-booking-id]');
+                
+                // Find the closest booking card group
+                const bookingGroup = target.closest('.flex.flex-col.shadow-md.rounded-xl');
+                if (!bookingGroup) return;
+
+                // Find the booking card within the group
+                const bookingCard = bookingGroup.querySelector('[data-booking-id]');
                 if (!bookingCard) return;
 
                 const bookingId = bookingCard.getAttribute('data-booking-id');
                 const booking = mockBookings.find(b => b.id === bookingId);
-
+                
+                // Find the corresponding bill details container
+                const billDetailsContainer = bookingGroup.querySelector(`#details-${bookingId}`);
+                
                 if (target.classList.contains('view-details-btn')) {
-                    if (booking) {
-                        renderBillDetails(booking);
+                    if (booking && billDetailsContainer) {
+                        // Toggle the visibility of the details container
+                        billDetailsContainer.classList.toggle('hidden');
+
+                        // If the container is now visible, render the details
+                        if (!billDetailsContainer.classList.contains('hidden')) {
+                            const detailsContent = billDetailsContainer.querySelector('.bill-details-content');
+                            renderBillDetails(booking, detailsContent);
+                        }
                     }
                 }
-
+                
+                // Handle the cancel button click
                 if (target.classList.contains('cancel-btn')) {
-                    
                     // Simulate API call to cancel the booking
                     console.log(`Cancelling booking with ID: ${bookingId}`);
-
                     // In a real app, you would handle the cancellation and re-render the list
                     showMessage(`Booking ${bookingId} has been successfully cancelled.`, 'success');
-
-                    // You could also remove the card from the DOM:
-                    // bookingCard.remove();
                 }
-            });
-
-            // Event listener for the "Close" button on the bill details section
-            closeBillBtn.addEventListener('click', function() {
-                billDetailsContainer.classList.add('hidden');
+                
+                // Handle the close button click for the details section
+                if (target.classList.contains('close-details-btn')) {
+                    if (billDetailsContainer) {
+                        billDetailsContainer.classList.add('hidden');
+                    }
+                }
             });
         });
     </script>
