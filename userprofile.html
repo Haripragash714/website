@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Quick Services</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font 'Inter' for a clean, modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <!-- User Profile Section -->
+    <div class="container mx-auto p-6 bg-white rounded-xl shadow-lg mt-8 mb-8 max-w-2xl">
+        <h2 class="text-4xl font-bold text-center text-gray-900 mb-2">My Profile</h2>
+        <p class="text-center text-gray-600 mb-8">Update your personal information and preferences.</p>
+
+        <!-- Profile picture and user name -->
+        <div class="flex flex-col items-center mb-8">
+            <img id="profile-picture" class="w-32 h-32 rounded-full object-cover border-4 border-indigo-500 shadow-md" src="https://placehold.co/128x128/e5e7eb/4b5563?text=User" alt="User Profile Picture">
+            <h3 id="user-name" class="text-2xl font-bold text-gray-800 mt-4">Jane Doe</h3>
+            <p id="user-email" class="text-gray-500">jane.doe@example.com</p>
+        </div>
+
+        <!-- Form for profile details -->
+        <form id="profile-form" class="space-y-6">
+            <!-- Message box for displaying feedback -->
+            <div id="messageBox" class="p-4 hidden text-sm rounded-lg" role="alert"></div>
+
+            <!-- Full Name -->
+            <div>
+                <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name</label>
+                <input type="text" id="fullName" name="fullName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <!-- Phone Number -->
+            <div>
+                <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <!-- Address -->
+            <div>
+                <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                <textarea id="address" name="address" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+            </div>
+
+            <!-- Settings -->
+            <div class="border-t border-gray-200 pt-6">
+                <h4 class="text-xl font-bold text-gray-800 mb-4">Settings</h4>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-700">Receive email notifications</span>
+                    <label for="notifications" class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="notifications" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Save Changes Button -->
+            <div class="flex justify-end">
+                <button type="submit" class="px-6 py-2 text-white font-medium bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileForm = document.getElementById('profile-form');
+            const messageBox = document.getElementById('messageBox');
+            const fullNameInput = document.getElementById('fullName');
+            const phoneNumberInput = document.getElementById('phoneNumber');
+            const addressInput = document.getElementById('address');
+            const notificationsToggle = document.getElementById('notifications');
+            const userNameDisplay = document.getElementById('user-name');
+            const userEmailDisplay = document.getElementById('user-email');
+            
+            // Mock data for the user profile
+            const mockUserProfile = {
+                name: 'Jane Doe',
+                email: 'jane.doe@example.com',
+                phone: '+1 (555) 123-4567',
+                address: '123 Main Street, Anytown, USA 12345',
+                notificationsEnabled: true
+            };
+
+            // Function to display messages to the user
+            function showMessage(text, type) {
+                messageBox.textContent = text;
+                messageBox.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700');
+                if (type === 'success') {
+                    messageBox.classList.add('bg-green-100', 'text-green-700');
+                } else if (type === 'error') {
+                    messageBox.classList.add('bg-red-100', 'text-red-700');
+                }
+                setTimeout(() => {
+                    messageBox.classList.add('hidden');
+                }, 3000);
+            }
+
+            // Populate the form with mock data on page load
+            function populateForm() {
+                fullNameInput.value = mockUserProfile.name;
+                phoneNumberInput.value = mockUserProfile.phone;
+                addressInput.value = mockUserProfile.address;
+                notificationsToggle.checked = mockUserProfile.notificationsEnabled;
+                userNameDisplay.textContent = mockUserProfile.name;
+                userEmailDisplay.textContent = mockUserProfile.email;
+            }
+
+            // Handle form submission
+            profileForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // In a real application, you would send this data to a server
+                const updatedProfile = {
+                    name: fullNameInput.value,
+                    phone: phoneNumberInput.value,
+                    address: addressInput.value,
+                    notificationsEnabled: notificationsToggle.checked
+                };
+
+                // Simulate a successful API call
+                console.log('Saving profile changes:', updatedProfile);
+                showMessage('Your profile has been successfully updated!', 'success');
+                
+                // Update the displayed name
+                userNameDisplay.textContent = updatedProfile.name;
+            });
+            
+            // Initialize the form
+            populateForm();
+        });
+    </script>
+</body>
+</html>
