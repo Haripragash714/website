@@ -24,75 +24,87 @@
         <h2 class="text-4xl font-bold text-center text-gray-900 mb-2">My Profile</h2>
         <p class="text-center text-gray-600 mb-8">Update your personal information and preferences.</p>
 
-        <!-- Profile picture and user name -->
+        <!-- Profile picture section -->
         <div class="flex flex-col items-center mb-8">
-            <img id="profile-picture" class="w-32 h-32 rounded-full object-cover border-4 border-indigo-500 shadow-md" src="https://placehold.co/128x128/e5e7eb/4b5563?text=User" alt="User Profile Picture">
-            <h3 id="user-name" class="text-2xl font-bold text-gray-800 mt-4">Jane Doe</h3>
-            <p id="user-email" class="text-gray-500">jane.doe@example.com</p>
+            <!-- User Icon SVG with a blue border -->
+            <div class="w-32 h-32 rounded-full border-4 border-indigo-500 shadow-md flex items-center justify-center overflow-hidden bg-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+            </div>
         </div>
 
         <!-- Form for profile details -->
-        <form id="profile-form" class="space-y-6">
+        <form id="profile-form">
             <!-- Message box for displaying feedback -->
             <div id="messageBox" class="p-4 hidden text-sm rounded-lg" role="alert"></div>
 
-            <!-- Full Name -->
-            <div>
-                <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name</label>
-                <input type="text" id="fullName" name="fullName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            </div>
-
-            <!-- Phone Number -->
-            <div>
-                <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                <input type="tel" id="phoneNumber" name="phoneNumber" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            </div>
-
-            <!-- Address -->
-            <div>
-                <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
-                <textarea id="address" name="address" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
-            </div>
-
-            <!-- Settings -->
-            <div class="border-t border-gray-200 pt-6">
-                <h4 class="text-xl font-bold text-gray-800 mb-4">Settings</h4>
-                <div class="flex items-center justify-between">
-                    <span class="text-gray-700">Receive email notifications</span>
-                    <label for="notifications" class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="notifications" class="sr-only peer">
-                        <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
-                    </label>
+            <!-- Profile Details Box -->
+            <div class="relative border border-gray-200 rounded-xl p-4 sm:p-6 space-y-6">
+                <!-- Edit/Save button at the top-right -->
+                <div class="absolute top-4 right-4">
+                    <button type="button" id="toggle-edit" class="flex items-center space-x-1 px-3 py-1.5 bg-gray-200 text-gray-700 font-medium rounded-lg shadow-md hover:bg-gray-300 transition-colors">
+                        <span id="button-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                                <path d="m15 5 4 4" />
+                            </svg>
+                        </span>
+                        <span id="button-text">Edit</span>
+                    </button>
                 </div>
-            </div>
+                
+                <!-- Full Name Field -->
+                <div>
+                    <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <p id="fullName-display" class="mt-1 block w-full px-3 py-2 text-gray-900"></p>
+                    <input type="text" id="fullName" name="fullName" class="mt-1 hidden w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
 
-            <!-- Save Changes Button -->
-            <div class="flex justify-end">
-                <button type="submit" class="px-6 py-2 text-white font-medium bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-                    Save Changes
-                </button>
+                <!-- Phone Number Field -->
+                <div>
+                    <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                    <p id="phoneNumber-display" class="mt-1 block w-full px-3 py-2 text-gray-900"></p>
+                    <input type="tel" id="phoneNumber" name="phoneNumber" class="mt-1 hidden w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+
+                <!-- Address Field -->
+                <div>
+                    <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                    <p id="address-display" class="mt-1 block w-full px-3 py-2 text-gray-900"></p>
+                    <textarea id="address" name="address" rows="3" class="mt-1 hidden w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                </div>
+
+                <!-- A hidden submit button for the form, will be triggered by "Save" button in edit mode -->
+                <button type="submit" class="hidden"></button>
             </div>
         </form>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const profileForm = document.getElementById('profile-form');
+            const toggleEditButton = document.getElementById('toggle-edit');
             const messageBox = document.getElementById('messageBox');
+            const buttonText = document.getElementById('button-text');
+            const buttonIcon = document.getElementById('button-icon');
+
             const fullNameInput = document.getElementById('fullName');
             const phoneNumberInput = document.getElementById('phoneNumber');
             const addressInput = document.getElementById('address');
-            const notificationsToggle = document.getElementById('notifications');
-            const userNameDisplay = document.getElementById('user-name');
-            const userEmailDisplay = document.getElementById('user-email');
             
+            const fullNameDisplay = document.getElementById('fullName-display');
+            const phoneNumberDisplay = document.getElementById('phoneNumber-display');
+            const addressDisplay = document.getElementById('address-display');
+            
+            let editMode = false;
+
             // Mock data for the user profile
-            const mockUserProfile = {
+            let mockUserProfile = {
                 name: 'Jane Doe',
                 email: 'jane.doe@example.com',
                 phone: '+1 (555) 123-4567',
                 address: '123 Main Street, Anytown, USA 12345',
-                notificationsEnabled: true
             };
 
             // Function to display messages to the user
@@ -109,38 +121,67 @@
                 }, 3000);
             }
 
-            // Populate the form with mock data on page load
-            function populateForm() {
-                fullNameInput.value = mockUserProfile.name;
-                phoneNumberInput.value = mockUserProfile.phone;
-                addressInput.value = mockUserProfile.address;
-                notificationsToggle.checked = mockUserProfile.notificationsEnabled;
-                userNameDisplay.textContent = mockUserProfile.name;
-                userEmailDisplay.textContent = mockUserProfile.email;
+            // Function to render the profile based on the current state
+            function renderProfile() {
+                // Populate display elements
+                fullNameDisplay.textContent = mockUserProfile.name;
+                phoneNumberDisplay.textContent = mockUserProfile.phone;
+                addressDisplay.textContent = mockUserProfile.address;
+
+                // Toggle visibility and state based on editMode
+                if (editMode) {
+                    // Set input values
+                    fullNameInput.value = mockUserProfile.name;
+                    phoneNumberInput.value = mockUserProfile.phone;
+                    addressInput.value = mockUserProfile.address;
+
+                    // Show inputs, hide display elements
+                    fullNameDisplay.classList.add('hidden');
+                    phoneNumberDisplay.classList.add('hidden');
+                    addressDisplay.classList.add('hidden');
+                    fullNameInput.classList.remove('hidden');
+                    phoneNumberInput.classList.remove('hidden');
+                    addressInput.classList.remove('hidden');
+
+                    // Update button for Save mode
+                    buttonText.textContent = 'Save';
+                    toggleEditButton.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+                    toggleEditButton.classList.add('bg-indigo-600', 'text-white', 'hover:bg-indigo-700');
+                    buttonIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>`;
+                    
+                } else {
+                    // Hide inputs, show display elements
+                    fullNameDisplay.classList.remove('hidden');
+                    phoneNumberDisplay.classList.remove('hidden');
+                    addressDisplay.classList.remove('hidden');
+                    fullNameInput.classList.add('hidden');
+                    phoneNumberInput.classList.add('hidden');
+                    addressInput.classList.add('hidden');
+
+                    // Update button for Edit mode
+                    buttonText.textContent = 'Edit';
+                    toggleEditButton.classList.remove('bg-indigo-600', 'text-white', 'hover:bg-indigo-700');
+                    toggleEditButton.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+                    buttonIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-edit"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>`;
+                }
             }
 
-            // Handle form submission
-            profileForm.addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevent default form submission
-
-                // In a real application, you would send this data to a server
-                const updatedProfile = {
-                    name: fullNameInput.value,
-                    phone: phoneNumberInput.value,
-                    address: addressInput.value,
-                    notificationsEnabled: notificationsToggle.checked
-                };
-
-                // Simulate a successful API call
-                console.log('Saving profile changes:', updatedProfile);
-                showMessage('Your profile has been successfully updated!', 'success');
+            // Handle edit/save button click
+            toggleEditButton.addEventListener('click', function() {
+                if (editMode) {
+                    // Save logic
+                    mockUserProfile.name = fullNameInput.value;
+                    mockUserProfile.phone = phoneNumberInput.value;
+                    mockUserProfile.address = addressInput.value;
+                    showMessage('Your profile has been successfully updated!', 'success');
+                }
                 
-                // Update the displayed name
-                userNameDisplay.textContent = updatedProfile.name;
+                editMode = !editMode;
+                renderProfile();
             });
-            
-            // Initialize the form
-            populateForm();
+
+            // Initialize form on page load
+            renderProfile();
         });
     </script>
 </body>
